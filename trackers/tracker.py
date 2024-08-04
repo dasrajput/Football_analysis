@@ -144,7 +144,7 @@ class Tracker:
                 frame = self.draw_ellipse(frame, player["bbox"], (0,0,255), track_id)
             #draw referee
             for track_id, referee in referee_dict.items():
-                frame = self.draw_ellipse(frame, referee["bbox"], (0,0,255), track_id)
+                frame = self.draw_ellipse(frame, referee["bbox"], (0,255,255), track_id)
 
            
 
