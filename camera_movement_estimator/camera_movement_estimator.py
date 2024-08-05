@@ -61,7 +61,7 @@ class CameraMovementEstimator:
                 camara_movement[frame_num] = [camara_movement_x, camara_movement_y]
                 old_features = cv2.goodFeaturesToTrack(frame_gray, **self.features)
             
-            old_gray = frame_gray.copy()
+            old_gray = frame_gray
 
         if stub_path is not None:
             with open(stub_path, 'wb') as f:
@@ -73,7 +73,7 @@ class CameraMovementEstimator:
         output_frames = []
         
         for frame_num, frame in enumerate(frames):
-            frame = frame.copy()
+            
 
             overlay = frame.copy()
             cv2.rectangle(overlay, (0, 0), (500, 100), (255, 255, 255), -1)

@@ -8,6 +8,8 @@ class TeamAssigner:
     def get_clustering_model(self, image):
         #reshape image to 2d array
         image_2d = image.reshape(-1, 3)
+        if image_2d.shape[0] == 0:
+                raise ValueError("No samples to fit the KMeans model. Check the input image.")
 
         # perform kmeans with 2 clusters
         kmeans = KMeans(n_clusters=2, init="k-means++", n_init=1)
