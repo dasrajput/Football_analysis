@@ -16,3 +16,16 @@ def save_video(output_video_frames,output_video_path):
     for frame in output_video_frames:
         out.write(frame)
     out.release()
+
+def process_video_in_batches(video_frames, batch_size=10):
+    num_frames = len(video_frames)
+    for start in range(0, num_frames, batch_size):
+        end = min(start + batch_size, num_frames)
+        batch_frames = video_frames[start:end]
+        process_batch(batch_frames)
+
+def process_batch(batch_frames):
+    # Example processing: Convert each frame to grayscale
+    for i in range(len(batch_frames)):
+        batch_frames[i] = cv2.cvtColor(batch_frames[i], cv2.COLOR_BGR2GRAY)
+    return batch_frames
