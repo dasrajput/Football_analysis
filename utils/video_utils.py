@@ -9,6 +9,7 @@ def read_video(video_path):
         if not ret:
             break
         frames.append(frame)
+    print(f"Video at {video_path} read successfully. Total frames: {len(frames)}")
     return frames
 
 def save_video(output_video_frames,output_video_path):
@@ -17,6 +18,7 @@ def save_video(output_video_frames,output_video_path):
     for frame in output_video_frames:
         out.write(frame)
     out.release()
+    print(f"Video saved at {output_video_path} successfully. Total frames: {len(output_video_frames)}")
 
 def process_video_in_batches(video_frames, batch_size=10):
     num_frames = len(video_frames)
