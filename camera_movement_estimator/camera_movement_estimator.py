@@ -53,8 +53,16 @@ class CameraMovementEstimator:
 
         for frame_num in range(1,len(frames)):
             frame_gray = cv2.cvtColor(frames[frame_num], cv2.COLOR_BGR2GRAY)
-            new_features,_,_ = cv2.calcOpticalFlowPyrLK(old_gray, frame_gray, old_features, None, **self.lk_params)
+            
+            old_features = cv2.goodFeaturesToTrack(frame_gray, **self.features)
+            if old_features is None:
+                print('No features found in frame', frame_num)
+                continue  # Skip this iteration of the loop
 
+            print(old_features.dtype, old_features.shape)
+            new_features,_,_ = cv2.calcOpticalFlowPyrLK(old_gray, frame_gray, old_features, None, **self.lk_params)
+    # Rest of your code...
+            print(old_gray.shape, frame_gray.shape)
             max_distance = 0
             camara_movement_x, camara_movement_y = 0, 0
             for i , (new,old) in enumerate(zip(new_features,old_features)):
@@ -69,8 +77,8 @@ class CameraMovementEstimator:
 
             if max_distance > self.minimum_distance:
                 camara_movement[frame_num] = [camara_movement_x, camara_movement_y]
-                old_features = cv2.goodFeaturesToTrack(frame_gray, **self.features)
             
+            old_features = cv2.goodFeaturesToTrack(frame_gray, **self.features)
             old_gray = frame_gray
 
         if stub_path is not None:
