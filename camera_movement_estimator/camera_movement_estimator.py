@@ -28,6 +28,16 @@ class CameraMovementEstimator:
             blockSize = 7,
             mask = mask_features
         )
+
+    def add_adjust_positions_to_tracks(self, tracks, camera_movement_per_frame):
+        for object, object_tracks in tracks.items():
+            for frame_num, track in enumerate(object_tracks):
+                for track_id, track_info in track.items():
+                    position = track_info['position']
+                    camera_movement = camera_movement_per_frame[frame_num]
+                    position_adjusted = (position[0] - camera_movement[0], position[1] - camera_movement[1])
+                    tracks[object][frame_num][track_id]['position_adjusted'] = position_adjusted
+
  
     def get_camera_movement(self, frames, read_from_stub = False, stub_path = None):
         # read the stub
@@ -43,8 +53,16 @@ class CameraMovementEstimator:
 
         for frame_num in range(1,len(frames)):
             frame_gray = cv2.cvtColor(frames[frame_num], cv2.COLOR_BGR2GRAY)
-            new_features,_,_ = cv2.calcOpticalFlowPyrLK(old_gray, frame_gray, old_features, None, **self.lk_params)
+            
+            old_features = cv2.goodFeaturesToTrack(frame_gray, **self.features)
+            if old_features is None:
+                print('No features found in frame', frame_num)
+                continue  # Skip this iteration of the loop
 
+            print(old_features.dtype, old_features.shape)
+            new_features,_,_ = cv2.calcOpticalFlowPyrLK(old_gray, frame_gray, old_features, None, **self.lk_params)
+    # Rest of your code...
+            print(old_gray.shape, frame_gray.shape)
             max_distance = 0
             camara_movement_x, camara_movement_y = 0, 0
             for i , (new,old) in enumerate(zip(new_features,old_features)):
@@ -59,9 +77,9 @@ class CameraMovementEstimator:
 
             if max_distance > self.minimum_distance:
                 camara_movement[frame_num] = [camara_movement_x, camara_movement_y]
-                old_features = cv2.goodFeaturesToTrack(frame_gray, **self.features)
             
-            old_gray = frame_gray.copy()
+            old_features = cv2.goodFeaturesToTrack(frame_gray, **self.features)
+            old_gray = frame_gray
 
         if stub_path is not None:
             with open(stub_path, 'wb') as f:
@@ -73,7 +91,7 @@ class CameraMovementEstimator:
         output_frames = []
         
         for frame_num, frame in enumerate(frames):
-            frame = frame.copy()
+            
 
             overlay = frame.copy()
             cv2.rectangle(overlay, (0, 0), (500, 100), (255, 255, 255), -1)
