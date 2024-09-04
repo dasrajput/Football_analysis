@@ -67,7 +67,7 @@ class SpeedAndDistance_Estimator():
                         position[1]+= 40
                         position = tuple(map(int,position))
                         cv2.putText(frame, f"{speed: .2f} km/h",position, cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 2)
-                        cv2.putText(frame, f"{distance: .2f} hr",(position[0],position[1]+20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 2)
+                        cv2.putText(frame, f"{distance: .2f} m",(position[0],position[1]+20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 2)
 
             output_frames.append(frame)
         return output_frames
