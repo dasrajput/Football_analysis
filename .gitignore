@@ -1,5 +1,4 @@
 # Ignore Python bytecode files
 *.mp4
 *.avi
-*.pt
 __pycache__/
