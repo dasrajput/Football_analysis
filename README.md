@@ -1,4 +1,4 @@
-### Development Manual for Football Analysis Project
+### Development Manual for **Football Analysis Project**
 
 ---
 
