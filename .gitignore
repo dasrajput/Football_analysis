@@ -7,3 +7,4 @@
 *.exe
 _internal/
 __pycache__/
+build/
