@@ -1,0 +1,9 @@
+# Ignore Python bytecode files
+*.mp4
+*.avi
+*.dll
+*.lib
+*.tcl
+*.exe
+_internal/
+__pycache__/
